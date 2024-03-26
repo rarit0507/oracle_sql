@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<oracle.dbtools.crest.model.design.relational.RelationalDesign>
+   <object objectType="SchemaObject" objectID="1481FB4A-EEAF-B603-58BE-2F65137F77DA" name="C##TEST123" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.SchemaObject" propertyParentId="3DA8CCB5-2BD6-3A4F-C1C0-318D8169E3BB" propertySourceId="" propertyTargetId=""/>
+   <object objectType="Table" objectID="43C5EE5B-3A64-AE9E-4AD6-1F6235B76FE3" name="EMP" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="3DA8CCB5-2BD6-3A4F-C1C0-318D8169E3BB" propertySourceId="" propertyTargetId=""/>
+   <object objectType="Table" objectID="09D69029-A7A5-E342-6D54-6CA34A0C656E" name="POS" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="3DA8CCB5-2BD6-3A4F-C1C0-318D8169E3BB" propertySourceId="" propertyTargetId=""/>
+   <object objectType="FKIndexAssociation" objectID="052A52EB-2A9A-AD2E-FC7D-5E1F5AF53A03" name="FKEY" seqName="seg_0" containerID="43C5EE5B-3A64-AE9E-4AD6-1F6235B76FE3" refContainerID="09D69029-A7A5-E342-6D54-6CA34A0C656E" propertyClassName="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" propertyParentId="3DA8CCB5-2BD6-3A4F-C1C0-318D8169E3BB" propertySourceId="09D69029-A7A5-E342-6D54-6CA34A0C656E" propertyTargetId="43C5EE5B-3A64-AE9E-4AD6-1F6235B76FE3"/>
+</oracle.dbtools.crest.model.design.relational.RelationalDesign>
