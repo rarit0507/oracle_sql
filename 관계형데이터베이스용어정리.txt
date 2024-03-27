@@ -1,0 +1,185 @@
+데이터베이스 : 애플리케이션이 입력/처리/출력해야 되는 데이터 집합체
+DBMS(데이터베이스 관리 시스템) : 애플리케이션이 입력/처리/출력해야 되는 데이터를 저장하고, 관리하고, 
+	운영하는 시스템
+관계형 데이터베이스 : 데이터 저장이 테이블과 같은 표로 이루어진 데이터베이스
+테이블(table) : 행과 컬럼으로 구성된 데이터 저장 구조 = Relation(관계)
+행(row) : 한 줄 데이터에 해당되며, 레코드(Record), 튜플(Tuple), 엔티티(Entity - 개체) 라고도 함
+	각기 다른 여러 컬럼이 모인 한 행 데이터
+	카디널리티(cardinality) : 튜플의 수 -> 건수
+컬럼(column) : 한 칸 데이터에 해당되며, 필드(Field), 항목(Item), 속성(Attribute) 라고도 함.
+	관계형 데이터베이스의 최소 단위
+	기본키(기본 항목) : Primary Key - 레코드와 레코드를 식별할 수 있도록 설정한 필드
+		유일성 만족, 최소성 만족, Not Null(널값이 아님) -> 개체 무결성
+		개체 무결성 : "레코드와 레코드를 식별함에 있어 중복되거나 널 값이면 레코드 식별이 불가능하다"라는 원칙
+		후보키(Cardidate Key) : 기본키를 결정하기 전에 기본키가 될 수 있는 필드
+		대체키(Alternate Key) : 기본키를 결정하고 난 다음 기본키는 아니지만, 얼마든지 기본키를 대신할 수 있는 키
+	외래키(참조 항목) : Foreign Key - 참조하려고 하는 테이블에 존재하는 비교(참조) 필드
+		반드시 참조 테이블에는 해당 값(비교대상)이 모두 있어야 함
+		참조 무결성 : "참조하려고 하는 테이블의 해당하는 값이 모두 존재해야 한다."는 원칙		
+	도메인(Domain) : 한 항목이 가질 수 있는 원자값들의 집합
+		kor>=0 and kor<=100
+		예를 들어 국어점수(kor)인 경우 0점~100점 사이에 분포하게 되는데 이런 것과 같이 한 항목이 가질 수 있는 값들의 범위를 말함
+		도메인 무결성 : "한 항목이 가질 수 있는 원자값들 또는 범위 안에만 들어야 한다."는 원칙
+	디그리(degree) : 필드(항목)의 수 -> 속성의 개수
+
+	사원(emp)	=>  사원코드의 첫글자와 직위(pos) 테이블의 직위코드를 참조하여 직위명을 구하라
+	사원코드	사원명
+	1234	권민지
+	2345	이성하
+	3456	이원석
+	4567	이예린
+	5678	이연정
+
+	직위(pos)
+	직위코드	직위명
+	1	이사
+	2	부장
+	3	과장
+	4	사원
+	5	인턴
+
+	view(뷰) : 실제 물리적으로 존재하는 것이 아닌 계산식이나 처리문장에 의하여 생성된 가상 테이블
+	create view pos_for_emp as select emp.사원코드, emp.사원명, pos.직위 from emp, pos where left(emp.사원코드, 1)=pos.직위코드;
+	select * from pos_for_emp;
+	사원별직위(pos_for_emp)
+	사원코드	사원명	직위
+	1234	권민지	이사
+	2345	이성하	부장
+	3456	이원석	과장
+	4567	이예린	사원
+	5678	이연정	인턴
+
+SQL(Structure Query Language) : 구조적 질의어 - 관계형 데이터베이스 구조에 저장된 데이터를 운영, 저장, 관리할 수 있도록 
+	질의하는 명령어로서 Query(질의어)라고 줄여서 부르기도 한다.
+
+DDL(Data Define Language) : 데이터 정의어
+	데이터베이스나 테이블/뷰/인덱스/시퀀스 정의(생성/변경/제거)할 때 사용하는 명령어
+	생성 : create database 데이터베이스명/create table 테이블명(필드명  데이터타입  제약조건,...)/create view 뷰명 as (select 명령)
+	변경 : alter database 원래데이터베이스명 rename 바꿀데이터베이스명/alter table 테이블명 [작업내용:이름변경,컬럼명변경,컬럼추가,컬럼데이터타입변경,컬럼삭제...]
+	제거 : drop database 데이터베이스명/drop table 테이블명 [추가옵션]/drop view 뷰명
+DML(Data Manipulation Language) : 데이터 조작(운영)어 -> Create/Read/Update/Delete
+	테이블의 레코드 단위로 작업(삽입/검색/변경/삭제)하는 명령어
+	삽입(추가 Create) : insert into 테이블명(컬럼명,...) values (값,...) -> 레코드 단위 추가
+	검색(읽기 Read) : select 컬럼명,... from 테이블명 [where 조건절] [join 조인절] [group by 그룹절] [order by 소트절] [집합연산명령] => 쿼리,뷰
+	변경(수정 Update) : update 테이블명 set 필드명=값 | 계산식 [where 조건절]
+	삭제(제거 Delete) : delete from 테이블명 [where 조건절]
+DCL(Data Control Language) : 데이터 제어어 -> 권한수행 또는 트랜잭션 등
+	Priviliges 명령
+		계정 생성 : create user 아이디 identified by 비밀번호
+		계정 내용 변경 : alter user 아이디 [작업내용:잠금설정,비밀번호변경,권한변경,...]
+		권한부여 : grant 권한종류(Type) | 세션종류(Role) to 아이디;
+		권한회수 : revoke 권한종류 | 세션종류 from 아이디;
+	TCL(Transaction Control Language)
+		트랜잭션(Transaction) : 원자성(Atomicity), 일관성(Consistency), 독립성(Isoration), 영속성(Durability) 이 있어야 하는 
+		한꺼번에 처리되어야 하는 일
+		트랜잭션의 성질 : ACID
+		트랜잭션 성공 처리 : commit
+		트랜잭션 실패 처리 : rollback 
+			-> 성공 또는 실패의 기점 지정 : savepoint
+	기타 명령
+		보안 명령 : create profile 프로파일명 limit
+			drop profile 프로파일명
+		.,,,
+
+
+
+
+ 
+
+		
+
+1. oracle sql plus 실행
+	1) cmd
+	2) sqlplus
+	3) system과 설치시 암호 입력
+
+2. 사용자 계정 추가 및 권한 부여
+	1) conn / as sysdba
+		dba로 접속
+	2) create user c##test123 identified by 20240325;
+		계정 c##test123 비밀번호 20240325 로 일반사용자 계정 생성
+	3) grant create any table to c##test123;
+		테이블 생성 권한 부여
+	4) grant connect, resource, dba to c##test123;
+		접속, 자원접근, 관리자 권한 부여
+	5) alter user c##test123 default tablespace users quota unlimited on users;
+		테이블공간을 사용할 수 있는 권한 부여	
+	6) conn c##test123/20240325
+		c##test123 계정으로 사용자 전환하여 로그인(quit -> sqlplus c##test123/20240325)			
+	7) show user;
+		현재 사용 중인 계정 확인
+
+3. 테이블 만들기 및 자료 추가
+	1. 테이블 생성 : create table 테이블(필드명1  타입  제약조건, 필드명2  타입  제약조건,...);
+		create table member(no int not null, id varchar(20) primary key, pw varchar(300), 
+		name varchar(100), birth timestamp, email varchar(300));
+		create sequence c##test123.mem_seq increment by 1 start with 1 minvalue 1 maxvalue 9999 nocycle;
+
+		create table emp(no int, name varchar(100), pcode int,
+		constraints key2 primary key (no));
+
+	2. 레코드 추가 : insert into 테이블명[(필드명1, 필드명2,...)] values (값1, 값2,...);
+		다만, 모든 필드의 값을 순서대로 입력할 경우 필드명 생략은 가능
+		insert into member values (mem_seq.nextval, 'kim', '1234', '김기태', '1981-12-25', 'kkt@gmail.com');
+		insert into member values (mem_seq.nextval, 'park', '1004', '박동수', '1998-03-25', 'park@naver.com');
+		insert into member values (mem_seq.nextval, 'lee', '1212', '이연정', '1979-08-15', 'lee@daum.net');
+		insert into member values (mem_seq.nextval, 'cho', '2848', '조대신', '1989-04-05', 'cho@gmail.com');
+		insert into member values (mem_seq.nextval, 'yu', '7979', '유정환', '1995-10-15', 'yu@naver.com');
+
+	3. 레코드 검색 : select 컬럼명1, 컬럼명2,.. from 테이블명 [where 조건절];
+		select * from member;
+		select id,name,birth from member;
+		select id,name from member where birth between '1980-01-01' and '1985-12-31';
+		select id,name from member where id like '%i%' or id like '%e%';
+		select * from member where id='kim' or id='lee' or id='cho' or id='park';
+		select * from member where id in ('kim','lee','cho');
+		select * from member where id not in ('kim','lee','cho');
+		select id,name,substr(name,1,1) as surname from member;
+	
+	4. 레코드 변경 : update 테이블명 set 컬럼명=변경할값 | 계산식 [where 조건절]
+		update member set email='lee@naver.com' where id='lee';
+
+	5. 레코드 삭제 : delete from 테이블명 [where 조건절]
+		delete from member where id='kim';
+		delete from temp2 where no is null;
+
+	6. 컬럼추가 : alter table 테이블명 add 컬럼명 데이터타입 [제약조건];
+		alter table member add regdate timestamp default sysdate;
+
+	7. 컬럼명 변경 : alter table 테이블명 rename column 변경전컬럼명 to 변경할컬럼명;
+		alter table member rename column regdate to reg;
+
+	8. 컬럼 데이터 타입 변경 : alter table member modify 컬럼명 데이터타입 [제약조건];
+		alter table member modify pw varchar(200);
+
+	9. 컬럼 제거 : alter table 테이블명 drop column 컬럼명;
+		alter table member drop column point;
+
+	10. 테이블명 변경 : alter table 원래테이블명 rename to 변경테이블명
+		alter table member rename to temp1;
+
+	11. 제약조건(기본키) 추가 : alter table 테이블명 add constraints 제약조건명 primary key (컬럼명);			
+		alter table temp2 add constraints key1 primary key (no);
+		(단, 제약조건 설정시 (기본키) 조건이 만족되지 않으면 실행할 수 없음)
+	
+	12. 제약조건(외래키) 추가 : alter table 테이블명 add constraints 제약조건명 foreign key (컬럼명) references 참조테이블명(참조컬럼명);			
+		alter table emp add constraints fkey foreign key (pcode) references pos(pcode);
+		(단, 참조하려고 하는 테이블의 컬럼에 참조값이 모두 존재해야 외래키를 설정할 수 있음)
+
+	13. SQL Developer에서 ERD 그리기
+		1) [파일]-[Data Modeler]-[임포트]-[데이터 딕셔너리]
+		2) 1단계 : 데이터베이스 접속자 선택 (test123 클릭 선택) -> [다음]
+		   2단계 : 스키마 선택(C##TEST123 체크 선택) -> [다음]
+		   3단계 : 테이블 선택(emp 체크 선택, pos 체크 선택) -> [다음] -> [완료]
+
+	14. 제약조건 검색 : select * from ALL_CONSTRAINTS [where 조건절]
+		select * from ALL_CONSTRAINTS where OWNER='C##TEST123';
+		select * from ALL_CONSTRAINTS where TABLE_NAME='EMP';
+
+	15. 제약조건 제거 : alter table emp drop constraint 제약조건명;
+		alter table emp drop constraint key2;
+
+	16. 테이블 제거 : drop table 테이블명 [옵션];
+		drop table pos cascade constraints;
+		(cascade constraints : 연쇄 삭제 옵션으로 제약조건 때문에 테이블을 삭제할 수 없는 경우 테이블을 제거하면서
+		제약 조건도 연쇄적 삭제)

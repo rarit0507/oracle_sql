@@ -1,0 +1,80 @@
+고급 SQL 명령
+	데이터 사전(Data Dictionary) : 데이터베이스의 저장된 데이터의 모든 정보(메타 데이터)
+		(사용자 정보, 데이터베이스 객체, 무결성 제약 상태, 함수, 프로시저 및 트리거 등)
+		데이터베이스 객체 : 인덱스, 시퀀스, 뷰, 테이블,...
+	데이터 사전의 권한등급에 따른 접근가능한 영역
+		데이터사전 조회 : select * from 데이터사전명 [where 조건절];
+
+		DBA_ > ALL_ > USER_		
+
+		DBA_ : DBA만 접근 가능
+		ALL_ : 모든 사용자가 접근 가능
+		USER_ : 자기 계정에서 생성한 것만 접근 가능
+
+		DBA_ : DBA_TABLES, DBA_TAB_COLUMNS, DBA_TAB_COMMENTS, DBA_CONSTRAINTS
+		ALL_ : ALL_TABLES, ALL_TAB_COLUMNS, ALL_TAB_COMMENTS, ALL_CONSTRAINTS, ALL_SEQUENCES
+		USER_ : USER_TABLES, USER_TAB_COLUMNS, USER_TAB_COMMENTS, USER_CONSTRAINTS, USER_SEQUENCES
+
+		사용자 데이터베이스객체 구조의 데이터사전 조회
+		desc 데이터베이스객체명;
+
+	뷰(View) : 가상 테이블로 실제 물리적으로 존재하는 것이 아니라 물리적 테이블의 검색식이며, 논리적으로만 존재하는 테이블
+	뷰의 생성 : create view 뷰명 as select명령문
+		create view view_emp as select * from emp;
+	뷰의 조회 : select 컬럼명,... from 뷰명;
+		select * from view_emp;
+	뷰의 수정 : create or replace view 뷰명 as select명령문;
+		create or replace view view_emp as select * from emp where no>=2 or name like '%이%';
+	뷰의 제거 : drop view 뷰명;
+		drop view view_emp;
+
+	시퀀스(Sequence) : 자동순번 부여 시스템(오라클에서는 자동순번 부여를 해당 컬럼에 직접적으로 할 수 없으므로 별도의 시퀀스가 필요)
+	시퀀스 생성 : create sequence 시퀀스명 increment by 증가값 start with 시작값 [옵션];
+		create sequence emp_seq increment by 1 start with 6 minvalue 1 maxvalue 9999 nocycle;
+	시퀀스 수정 : alter sequence 시퀀스명 변경할내용;
+		alter sequence emp_seq increment by 1;
+		(단, 시작값은 변경할 수 없음)
+	시퀀스 제거 : drop sequence 시퀀스명;
+		drop sequence emp_seq;
+	시퀀스 정보 조회 : select * from all_sequences where sequence_name = '시퀀스명';
+		select * from all_sequences where sequence_name = 'EMP_SEQ';
+	시퀀스 값을 테이블에 적용 : insert into 테이블명 values(시퀀스명.nextval,...);
+		insert into emp values (emp_seq.nextval, '고', 3);
+	시퀀스의 현재값 조회 : select 시퀀스명.currval from dual;
+		select emp_seq.currval from dual;
+
+	테이블 복제 : create table 테이블명 as select명령문;
+		create table emp2 as select * from emp;
+		(단, 제약조건이나 컬럼의 특이사항은 복제가 되지 않음)
+
+	고급 질의
+		조인(Join Query) : 여러 개의 테이블을 하나의 표로 출력될 수 있도록 테이블간을 연결하는 select명령문
+			select a.no, a.name, b.pname from emp a inner join pos b on a.pcode=b.pcode; 
+			select a.no, a.name, b.pname from emp a left outer join pos b on a.pcode=b.pcode; 
+		서브쿼리(Sub Query) : in/not in 등을 활용하여 여러 테이블을 이중적으로 검색하는 select명령문
+			select no, name from emp where no in (select no from emp2)
+			select no, name from emp where name not in (select name from emp2);
+		연관쿼리(Associative Query) : 복수 개의 테이블을 조건절에 의하여 매칭하고, 검색하는 select명령문
+			select a.no, a.name, b.pname from emp a, pos b where a.pcode=b.pcode;
+		집합쿼리(Set Query) : 여러 개의 테이블을 집합처럼 합집합,교집합,차집합 등으로 테이블간의 연산 select명령문
+			create view uni_view as (select no, pcode from emp union select no, pcode from emp2);
+			select * from uni_view;
+
+			create view int_view as (select * from emp intersect select * from emp2);
+			select * from int_view;
+
+			create view min_view1 as (select * from emp minus select * from emp2);
+			select * from min_view1;
+
+		집계쿼리(Total Query) : group by절에 의해 하나의 테이블의 특정 컬럼의 값들을 같은 값을 갖는 것으로 분류하여
+			통계를 처리하는 select명령문
+			select pos.pname, count(emp.no) as cnt from pos, emp where pos.pcode = emp.pcode group by pos.pname order by pos.pname;
+	
+		sql pl(procedure language) : 함수, 프로시저, 트리거 등이 속하며, 이벤트 처리 및 반복, 조건 처리가 가능함.
+		sql 튜닝
+
+
+
+
+
+		
