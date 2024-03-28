@@ -69,7 +69,7 @@ alter table member2 modify id varchar(12) primary key;  --1.
 alter table member2 add constraints idkey primary key (id); --2. 기본키 지우기 용이하기 위해 constraints 많이 사용
     --alter table member2 drop constraints idkey; --constraints 지우기 키
 
--- 23★) 도서2(boo2) 테이블에 도서코드(bookid)를 기본키로 도서분류(bookkind)를 외래키로 추가하시오.★★★★★★★★★★
+-- 23★) 도서2(book2) 테이블에 도서코드(bookid)를 기본키로 도서분류(bookkind)를 외래키로 추가하시오.★★★★★★★★★★
 create table bookkind(kindcode varchar(6) primary key, kindname varchar(50));   --외래키 추가하려면 테이블이 있어야
 insert into bookkind values ('IT','IT관련서적');
 insert into bookkind values ('NV','소설');

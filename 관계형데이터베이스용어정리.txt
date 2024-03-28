@@ -183,3 +183,20 @@ DCL(Data Control Language) : 데이터 제어어 -> 권한수행 또는 트랜�
 		drop table pos cascade constraints;
 		(cascade constraints : 연쇄 삭제 옵션으로 제약조건 때문에 테이블을 삭제할 수 없는 경우 테이블을 제거하면서
 		제약 조건도 연쇄적 삭제)
+
+
+	GUI 도구
+	Oracle => SQL Developer
+	MySQL, MariaDB => Work Bench
+	Postgres => pgAdmin
+	SQLite => DBEver
+
+
+
+
+
+
+
+
+
+

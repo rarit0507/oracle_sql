@@ -5,6 +5,5 @@ show databases;
 use temp;
 -- 테이블 구조 보기
 desc student;
-insert into student values (10, "김수로", 80);
-insert into student values (4, "집갈래", 60);
+insert into student values (10, '김수로', 80);
 select * from student;
